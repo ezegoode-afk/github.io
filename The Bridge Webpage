@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticating...</title>
+    <style>
+        body { font-family: sans-serif; background-color: #222; color: #eee; text-align: center; padding-top: 50px; }
+        h1 { color: #f96854; }
+        a { color: #f96854; }
+    </style>
+</head>
+<body>
+    <h1>Authenticating with Patreon...</h1>
+    <p>If you are not redirected back to the app shortly, please click the link below:</p>
+    <p><a id="redirect-link" href="#">Return to App</a></p>
+
+    <script>
+        // --- IMPORTANT ---
+        // Change this to match the scheme you set in your Godot export settings.
+        const CUSTOM_SCHEME = "my-comic-app";
+
+        window.onload = function() {
+            // Get the URL parameters from the browser's address bar
+            const urlParams = new URLSearchParams(window.location.search);
+            const authCode = urlParams.get('code');
+
+            const redirectLink = document.getElementById('redirect-link');
+
+            if (authCode) {
+                // If we found the code, construct the custom URL to send it back to the app.
+                const appUrl = `${CUSTOM_SCHEME}://patreon-redirect?code=${authCode}`;
+                
+                // Update the fallback link
+                redirectLink.href = appUrl;
+                
+                // Attempt to automatically redirect the user back to the app.
+                window.location.href = appUrl;
+            } else {
+                // Handle the case where the user denied the request or an error occurred.
+                document.querySelector('h1').innerText = "Authentication Failed";
+                document.querySelector('p').innerText = "Something went wrong during the Patreon authentication. Please try again from the app.";
+                redirectLink.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
