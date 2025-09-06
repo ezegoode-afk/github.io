@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patreon Authentication</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            text-align: center;
+        }
+        .container {
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a1a1a;
+        }
+        p {
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #ff424d; /* Patreon Red */
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .button:hover {
+            background-color: #e03842;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Authentication Successful!</h1>
+        <p>Click the button below to return to the app.</p>
+        <a href="#" id="redirectLink" class="button">Return to App</a>
+    </div>
+
+    <script>
+        // This function will run as soon as the page loads.
+        (function() {
+            // The custom URL scheme your Godot app is registered to handle.
+            const customAppUrl = "my-comic-app://patreon-redirect";
+            
+            // Get the URL parameters from the address bar.
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+
+            const redirectLink = document.getElementById('redirectLink');
+
+            if (code) {
+                // If a code was found, construct the full redirect link for the button.
+                const finalUrl = `${customAppUrl}?code=${code}`;
+                redirectLink.href = finalUrl;
+
+                // Also, try to redirect automatically. On many mobile browsers this will
+                // be blocked, but it might work on some desktop browsers.
+                window.location.href = finalUrl;
+            } else {
+                // If no code was found, update the UI to show an error.
+                document.querySelector('h1').innerText = "Authentication Failed";
+                document.querySelector('p').innerText = "No authorization code was found. Please try logging in again from the app.";
+                redirectLink.style.display = 'none'; // Hide the button
+            }
+        })();
+    </script>
+
+</body>
+</html>
