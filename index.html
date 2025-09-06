@@ -53,33 +53,28 @@
     </div>
 
     <script>
-        // This function will run as soon as the page loads.
         (function() {
-            // The custom URL scheme your Godot app is registered to handle.
-            const customAppUrl = "my-comic-app://patreon-redirect";
+            // --- CHANGE THIS TO MATCH THE SCHEME IN YOUR SCRIPT ---
+            const appScheme = "endlesssong"; 
+            const redirectPath = "patreon-redirect";
             
-            // Get the URL parameters from the address bar.
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
 
             const redirectLink = document.getElementById('redirectLink');
 
             if (code) {
-                // If a code was found, construct the full redirect link for the button.
-                const finalUrl = `${customAppUrl}?code=${code}`;
+                const finalUrl = `${appScheme}://${redirectPath}?code=${code}`;
                 redirectLink.href = finalUrl;
-
-                // Also, try to redirect automatically. On many mobile browsers this will
-                // be blocked, but it might work on some desktop browsers.
                 window.location.href = finalUrl;
             } else {
-                // If no code was found, update the UI to show an error.
                 document.querySelector('h1').innerText = "Authentication Failed";
                 document.querySelector('p').innerText = "No authorization code was found. Please try logging in again from the app.";
-                redirectLink.style.display = 'none'; // Hide the button
+                redirectLink.style.display = 'none';
             }
         })();
     </script>
 
 </body>
 </html>
+
